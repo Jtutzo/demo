@@ -11,7 +11,7 @@ var requestUtil = require('./../modules/requestUtil');
 */
 router.get('/', function(req, res, next) {
     try {
-        res.render("user/index.ejs");
+        res.render("user/index.ejs", { title: 'Demo Users' });
     } catch (e) {
         responseUtil.sendError(req, res, e);
     }
