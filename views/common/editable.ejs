@@ -1,0 +1,8 @@
+<template id="editable-text-template">
+    <div data-bind="attr:{'class': classDiv, 'id': id}, visible: visible(), css: { 'has-error': error }">
+        <label data-bind="attr:{'class': classLabel}, text: label, visible: visibleLabel()"></label>
+        <div data-bind="attr:{'class': classControl}">
+            <input class="form-control" data-bind="attr:{'type': format, 'placeholder': placeholder}, value: value, event: {blur: blur, focus: focus}">
+        </div>
+    </div>
+</template>

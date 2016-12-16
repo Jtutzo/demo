@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <% include ./../common/default-include.ejs %>
+
+        <script src="/js/index.js"></script>
+        <script src="/js/modal/modal-user.js"></script>
+        <link rel="stylesheet" href="/css/index.css">
+        <script type="text/javascript">
+		      window.getAllUsersUrl = "/users/get-all";
+              window.saveUserUrl = "/users/save";
+              window.removeUserUrl = "/users/remove";
+	    </script>
+        <title>arch-type</title>
+    </head>
+    <body>
+
+        <div id="main" class="container">
+
+            <!-- Title -->
+            <h1><center>Welcome to demo arch-type</center></h1>
+
+            <!-- Tableau users -->
+            <table id="liste_users">
+                <thead>
+                    <tr>
+                        <td style="width:10%"><input type="checkbox" name="all" value="true" data-bind="checked: selectedAll"/></td>
+                        <td style="width:10%">Id</td>
+                        <td style="width:40%">Nom</td>
+                        <td style="width:40%">Prénom</td>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: users">
+                    <tr data-bind="style: { 'background-color': (($index() + 1)%2==0)?'#f1f1f1':'#fff'}">
+                        <td><input class="checkbox_line" type="checkbox" data-bind="attr: {'value': id}, checked: $parent.valuesSelected" /></td>
+                        <td data-bind="text: id, click: $parent.selectedLine"></td>
+                        <td data-bind="text: nom, click: $parent.selectedLine"></td>
+                        <td data-bind="text: prenom, click: $parent.selectedLine"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Buttons -->
+            <div class="pull-right">
+                <button id="refresh" class="btn btn-default" data-bind="click : refreshUsers">Refresh</button>
+                <button id="add" class="btn btn-default" data-bind="click : addUser">Add</button>
+                <button id="update" class="btn btn-default" data-bind="click : updateUser, enable: updateEnable">Update</button>
+                <button id="remove" class="btn btn-default" data-bind="click : removeUsers, enable: removeEnable">Remove</button>
+            </div>
+
+        </div>
+
+        <% include ./modal/modal-user.ejs %>
+        <% include ./../common/editable.ejs %>
+
+    </body>
+</html>
