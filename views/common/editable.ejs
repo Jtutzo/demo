@@ -6,3 +6,13 @@
         </div>
     </div>
 </template>
+
+<template id="editable-select-template">
+    <div data-bind="attr:{'class': classDiv, 'id': id}, visible: visible(), css: { 'has-error': error }">
+        <label data-bind="attr:{'class': classLabel}, text: label, visible: visibleLabel()"></label>
+        <div data-bind="attr:{'class': classControl}">
+            <select data-bind="selectedOptions: selectedOptions, options: options, select2: {placeholder: placeholder, maximumSelectionLength: maxChoice,
+                allowClear: false, width: '100%'}, attr: {multiple: multiple}"></select>
+        </div>
+    </div>
+</template>

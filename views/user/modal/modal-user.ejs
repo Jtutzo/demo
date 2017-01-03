@@ -9,6 +9,8 @@
             <div class="modal-body">
                 <editable-text params="id: 'nom', label: 'Nom : ', value: user.nom, required: true, classLabel: 'col-sm-4', classControl: 'col-sm-8'" ></editable-text>
                 <editable-text params="id: 'prenom', label: 'Prenom : ', value: user.prenom, required: true, classLabel: 'col-sm-4', classControl: 'col-sm-8'" ></editable-text>
+                <editable-select params="id: 'pays', label: 'pays : ', value: pays, classLabel: 'col-sm-4', classControl: 'col-sm-8',
+                    reference: 'libelle', url: '/pays/get-all', originalOptions: optionsPays, multiple: false"></editable-select>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-bind="click : save">save</button>

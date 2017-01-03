@@ -11,6 +11,8 @@ $(document).ready(function() {
         self['title'] = ko.observable("add user");
         self['user'] = {nom: ko.observable(), prenom: ko.observable()};
         self['actionCalback'] = null;
+        self['pays'] = ko.observable();
+        self['optionsPays'] = ko.observableArray([]);
 
         /**
         * Ouvre la modal
