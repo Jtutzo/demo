@@ -1,5 +1,6 @@
 
 var vmMaster = null;
+var vmDatePicker = null;
 
 $(document).ready(function() {
 

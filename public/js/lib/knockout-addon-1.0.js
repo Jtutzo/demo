@@ -13,12 +13,15 @@
 ko.bindingHandlers.modal = {
     init: function (element, valueAccessor) {
         $(element).modal({
+            /*keyboard: false,
+            backdrop : false,*/
             show: false
         });
 
         var value = valueAccessor();
         if (typeof value === 'function') {
-            $(element).on('hide.bs.modal', function() {
+            $(element).on('hide.bs.modal', function(e) {
+                e.stopPropagation();
                value(false);
             });
         }
@@ -57,6 +60,18 @@ ko.bindingHandlers.select2 = {
         });
         $(element).on('select2:select select2:unselect', function() {
             ignoreChange = false;
+        });
+
+        $(element).on('select2:open', function() {
+            if (typeof allBindings['focus'] === 'function') {
+                allBindings.focus();
+            }
+        });
+
+        $(element).on('select2:close', function() {
+            if (typeof allBindings['blur'] === 'function') {
+                allBindings.blur();
+            }
         });
 
         initSubscriptionValue();
@@ -140,7 +155,43 @@ ko.bindingHandlers.select2 = {
         }
 
     }
-    
+
+};
+
+/**
+* Binding datepicker
+*/
+ko.bindingHandlers.datepicker = {
+    init: function(element, valueAccessor, allBindingsAccessor) {
+      //initialize datepicker with some optional options
+      var options = allBindingsAccessor().datepickerOptions || {};
+      $(element).datepicker(options);
+
+      //when a user changes the date, update the view model
+      ko.utils.registerEventHandler(element, "changeDate", function(event) {
+             var value = valueAccessor();
+             if (ko.isObservable(value)) {
+                 value(event.date);
+             }
+      });
+
+      $(element).on('hide', function(e) {
+          e.stopPropagation();
+      });
+    },
+    update: function(element, valueAccessor)   {
+        var widget = $(element).data("datepicker");
+        if (widget) {
+            //when the view model is updated, update the widget
+            var date = ko.utils.unwrapObservable(valueAccessor());
+            if (date && !isNaN(date)) {
+                $(element).datepicker("setDate", date);
+            } else {
+                data = "";
+                $(element).val(date).datepicker("update");
+            }
+        }
+    }
 };
 
 /**=============================================================================

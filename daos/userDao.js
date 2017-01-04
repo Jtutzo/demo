@@ -2,8 +2,8 @@ var sqlite = require('./../modules/sqlite');
 var util = require('./../modules/util');
 
 module.exports.tabName = 'user';
-module.exports.colonnes = ['nom', 'prenom', 'idPays'];
-module.exports.columnList = "user.id user_Id, user.nom user_Nom, user.prenom user_Prenom, user.idPays user_IdPays";
+module.exports.colonnes = ['nom', 'prenom', 'idPays', 'date'];
+module.exports.columnList = "user.id user_Id, user.nom user_Nom, user.prenom user_Prenom, user.idPays user_IdPays, user.date user_Date";
 
 var columnListPays = require("./paysDao").columnList;
 var tabNamePays = require("./paysDao").tabName;
@@ -111,6 +111,7 @@ function factoryUser(row) {
     user['nom'] = row['user_Nom'];
     user['prenom'] = row['user_Prenom'];
     user['idPays'] = row['user_IdPays'];
+    user['date'] = row['user_Date'];
     if (util.isNotNullOrUndefined(row['referentielPays_Id'])) {
         pays['id'] = row['referentielPays_Id'];
         pays['code'] = row['referentielPays_Code'];
