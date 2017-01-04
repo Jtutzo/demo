@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var referentielPays = require('./../services/referentielPays');
+var paysService = require('./../services/paysService');
 var util = require('./../modules/util');
 var responseUtil = require('./../modules/responseUtil');
 var requestUtil = require('./../modules/requestUtil');
@@ -10,7 +10,7 @@ var requestUtil = require('./../modules/requestUtil');
 */
 router.post('/get-all', function(req, res, next) {
     try {
-        referentielPays.getAll(function(err, pays) {
+        paysService.getAll(function(err, pays) {
             if (err === undefined || err === null) {
                 responseUtil.sendObject(req, res, pays);
             } else {
@@ -25,7 +25,7 @@ router.post('/get-all', function(req, res, next) {
 router.post('/get-by-code', function(req, res, next) {
     try {
         var params = requestUtil.getParams(req, [{name: 'code', type: util.STRING, required: false}]);
-        referentielPays.getByCode(params['code'], function(err, pays) {
+        paysService.getByCode(params['code'], function(err, pays) {
             if (err === undefined || err === null) {
                 responseUtil.sendObject(req, res, pays);
             } else {

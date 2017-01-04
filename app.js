@@ -6,10 +6,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
-var pays = require('./routes/pays');
+var userRoute = require('./routes/userRoute');
+var paysRoute = require('./routes/paysRoute');
 
 var app = express();
+
+dataSource = __dirname + require('./conf.json').dataSource;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,8 +26,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
-app.use('/pays', pays);
+app.use('/user', userRoute);
+app.use('/pays', paysRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,6 +1,12 @@
 
 var util = require('./util');
 
+/**
+* Vérifie et extrait les paramêtres de la requête
+* @param req
+* @param stereotypeParams
+* @return params
+*/
 module.exports.getParams = function(req, stereotypeParams) {
 
     util.notObjectException(req, "requestUtil => req must be an object value");

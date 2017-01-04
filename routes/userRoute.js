@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var users = require('./../services/users');
+var userService = require('./../services/userService');
 var util = require('./../modules/util');
 var responseUtil = require('./../modules/responseUtil');
 var requestUtil = require('./../modules/requestUtil');
@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
 */
 router.post('/get-all', function(req, res, next) {
     try {
-        users.getAll(function(err, users) {
+        userService.getAll(function(err, users) {
             if (err === undefined || err === null) {
                 responseUtil.sendObject(req, res, users);
             } else {
@@ -40,7 +40,7 @@ router.post('/get-all', function(req, res, next) {
 router.post('/save', function(req, res, next) {
     try {
         var params = requestUtil.getParams(req, [{name: 'user', type: util.OBJECT, required: true}]);
-        users.save(params['user'], function(err, user) {
+        userService.save(params['user'], function(err, user) {
             if (err === undefined || err === null) {
                 responseUtil.sendObject(req, res, user);
             } else {
@@ -58,7 +58,7 @@ router.post('/save', function(req, res, next) {
 router.post("/remove", function(req, res, next) {
     try {
         var params = requestUtil.getParams(req, [{name: 'idUsers', type: util.ARRAY, required: true}]);
-        users.remove(params['idUsers'], function(err, idUsers) {
+        userService.remove(params['idUsers'], function(err, idUsers) {
             if (err === undefined || err === null) {
                 responseUtil.sendObject(req, res, idUsers);
             } else {
