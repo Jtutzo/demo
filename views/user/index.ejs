@@ -27,8 +27,9 @@
                     <tr>
                         <td style="width:10%"><input type="checkbox" name="all" value="true" data-bind="checked: selectedAll"/></td>
                         <td style="width:10%">Id</td>
-                        <td style="width:40%">Nom</td>
-                        <td style="width:40%">Prénom</td>
+                        <td style="width:25%">Nom</td>
+                        <td style="width:25%">Prénom</td>
+                        <td style="width:30%">Pays</td>
                     </tr>
                 </thead>
                 <tbody data-bind="foreach: users">
@@ -37,6 +38,7 @@
                         <td data-bind="text: id, click: $parent.selectedLine"></td>
                         <td data-bind="text: nom, click: $parent.selectedLine"></td>
                         <td data-bind="text: prenom, click: $parent.selectedLine"></td>
+                        <td data-bind="text: (pays)?pays.libelle:'', click: $parent.selectedLine"></td>
                     </tr>
                 </tbody>
             </table>

@@ -52,7 +52,7 @@ module.exports.search = function(tabName, colonnes, values, handler) {
 
     var query = queryStart + queryClause;
 
-    module.exports.exc(query, values, function(err, rows) {
+    module.exports.run(query, values, function(err, rows) {
         if (util.isFunction(handler)) {
             handler(err, rows);
         }
@@ -91,7 +91,7 @@ module.exports.insert = function(tabName, colonnes, value, handler) {
 
     var query = queryStart + queryColonnes + queryMiddle + queryValues;
 
-    module.exports.exc(query, params, function(err, row, e) {
+    module.exports.run(query, params, function(err, row, e) {
         value["id"] = e.lastID;
         if (util.isFunction(handler)) {
             handler(err, value);
@@ -124,7 +124,7 @@ module.exports.update = function(tabName, colonnes, value, handler) {
     var query = queryStart + queryColonnes + queryEnd;
     params.push(value['id']);
 
-    module.exports.exc(query, params, function(err) {
+    module.exports.run(query, params, function(err) {
         if (util.isFunction(handler)) {
             handler(err, value);
         }
@@ -161,7 +161,7 @@ module.exports.removeById = function(tabName, ids, handler) {
     }
 }
 
-module.exports.exc = function(query, params, handler) {
+module.exports.run = function(query, params, handler) {
     util.notStringException(query, "Module sqlite => query must be a string value.");
     var expr = (util.isNotNullOrUndefined(params) && util.isNotArray(params));
     util.argumentException(expr, "Module sqlite => bad type params.");
@@ -170,6 +170,21 @@ module.exports.exc = function(query, params, handler) {
         db.run(query, params, function(err, rows) {
             if (typeof handler === 'function') {
                 handler(err, rows, this);
+            }
+        });
+        db.close();
+    } else {
+        throw new Error("Module sqlite => dataSource doesn't exist.");
+    }
+}
+
+module.exports.all = function(query, handler) {
+    util.notStringException(query, "Module sqlite => query must be a string value.");
+    if (fs.existsSync(dataSource)) {
+        var db = new sqlite3.Database(dataSource);
+        db.all(query, function(err, rows) {
+            if (typeof handler === 'function') {
+                handler(err, rows);
             }
         });
         db.close();

@@ -1,16 +1,40 @@
 var sqlite = require('./../modules/sqlite');
 var util = require('./../modules/util');
 
-var tabName = 'user';
-var colonnes = ['nom', 'prenom'];
+module.exports.tabName = 'user';
+module.exports.colonnes = ['nom', 'prenom', 'idPays'];
+module.exports.columnList = "user.id user_Id, user.nom user_Nom, user.prenom user_Prenom, user.idPays user_IdPays";
+
+var columnListPays = require("./paysDao").columnList;
+var tabNamePays = require("./paysDao").tabName;
 
 /**
 * Récupère tous les utilisateurs
 * @param handler
 */
 module.exports.getAll = function(handler) {
-    sqlite.getAll(tabName, function(err, rows) {
+    sqlite.getAll(module.export.tabName, function(err, rows) {
         if (util.isFunction(handler)) handler(err, rows);
+    });
+}
+
+/**
+* Récupère tous les utilisateurs avec le pays associé
+* @param handler
+*/
+module.exports.getAllWithPays = function(handler) {
+    var query = "SELECT " + module.exports.columnList + ", " + columnListPays + " ";
+    query += "FROM " + module.exports.tabName + " ";
+    query += "LEFT JOIN " + tabNamePays + " ON " + tabNamePays + ".id = " + module.exports.tabName + ".idPays";
+    sqlite.all(query, function(err, rows) {
+        var users = [];
+        if (util.isArray(rows)) {
+            rows.forEach(function(row) {
+                var user = factoryUser(row);
+                users.push(user);
+            });
+        }
+        if (util.isFunction(handler)) handler(err, users);
     });
 }
 
@@ -23,7 +47,7 @@ module.exports.getById = function(id, handler) {
     util.nullOrUndefinedException(id, "Service user => id mustn't be null or undefined.");
     var idNum = JSON.parse(id);
     util.notNumberException(idNum, "Service user => id must be a number value");
-    sqlite.getById(tabName, idNum, function(err, row) {
+    sqlite.getById(module.exports.tabName, idNum, function(err, row) {
         if (util.isFunction(handler)) handler(err, row);
     });
 }
@@ -51,7 +75,7 @@ module.exports.save = function(user, handler) {
 */
 module.exports.insert = function(user, handler) {
     util.isNotObject(user, "Service user => user must be an object value.");
-    sqlite.insert(tabName, colonnes, user, function(err, result) {
+    sqlite.insert(module.exports.tabName, module.exports.colonnes, user, function(err, result) {
         if (util.isFunction(handler)) handler(err, result);
     })
 }
@@ -63,7 +87,7 @@ module.exports.insert = function(user, handler) {
 */
 module.exports.update = function(user, handler) {
     util.isNotObject(user, "Service user => user must be an object value.");
-    sqlite.update(tabName, colonnes, user, function(err, result) {
+    sqlite.update(module.exports.tabName, module.exports.colonnes, user, function(err, result) {
         if (util.isFunction(handler)) handler(err, result);
     });
 }
@@ -75,7 +99,23 @@ module.exports.update = function(user, handler) {
 */
 module.exports.remove = function(idUsers, handler) {
     util.notArrayException(idUsers, "Service user => idUsers must be an array value.");
-    sqlite.removeById(tabName, idUsers, function(err, row) {
+    sqlite.removeById(module.exports.tabName, idUsers, function(err, row) {
         if (util.isFunction(handler)) handler(err, row);
     });
+}
+
+function factoryUser(row) {
+    var user = {};
+    var pays = {};
+    user['id'] = row['user_Id'];
+    user['nom'] = row['user_Nom'];
+    user['prenom'] = row['user_Prenom'];
+    user['idPays'] = row['user_IdPays'];
+    if (util.isNotNullOrUndefined(row['referentielPays_Id'])) {
+        pays['id'] = row['referentielPays_Id'];
+        pays['code'] = row['referentielPays_Code'];
+        pays['libelle'] = row['referentielPays_Libelle'];
+        user['pays'] = pays;
+    }
+    return user;
 }

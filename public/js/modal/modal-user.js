@@ -26,6 +26,7 @@ $(document).ready(function() {
                 self['user']['id'] = user['id'];
                 self['user'].nom(user['nom']);
                 self['user'].prenom(user['prenom']);
+                self.pays(user['idPays']);
             } else {
                 self.title("Add user");
             }
@@ -41,6 +42,7 @@ $(document).ready(function() {
             self['user']['id'] = undefined;
             self['user'].nom(null);
             self['user'].prenom(null);
+            self.pays(null);
         }
 
         /**
@@ -50,7 +52,15 @@ $(document).ready(function() {
             var user = {
                 id: self['user']['id'],
                 nom: self['user'].nom(),
-                prenom: self['user'].prenom()
+                prenom: self['user'].prenom(),
+            }
+            var pays = ko.utils.unwrapObservable(self.pays());
+            if (util.isObject(pays)) {
+                user['idPays'] = self.pays().id
+                user['pays'] = pays;
+            } else {
+                user['idPays'] = null;
+                user['pays'] = null;
             }
             if (util.isFunction(self['actionCalback'])) {
                 self.actionCalback(user);

@@ -5,7 +5,7 @@ var userDao = require('./../daos/userDao');
 * @param handler
 */
 module.exports.getAll = function(handler) {
-    userDao.getAll(handler);
+    userDao.getAllWithPays(handler);
 }
 
 /**
