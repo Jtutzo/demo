@@ -18,6 +18,37 @@ module.exports.getParams = function(req, stereotypeParams) {
 }
 
 /**
+* Vérifie et extrait le paramêtres correspondant au nom
+* @param req
+* @param name
+* @param option: {type: string, required: boolean}
+* @return params
+*/
+module.exports.getParam = function(req, name, option) {
+
+    util.notObjectException(req, "requestUtil => req must be an object value");
+
+    var param = req[name];
+
+    if (util.isObject(option)) {
+
+        var typeParam = util.getType(param);
+        var required = option['required'];
+        if (required && (typeParam === util.UNDEFINED || typeParam === util.NULL)) {
+            throw new Error("module requestUtil => params : " + name + " is required.");
+        }
+
+        var type = option['type'];
+        if (util.isString(type) && util.isNotEmpty(type) && typeParam !== type
+            && ((!required && typeParam !== util.UNDEFINED && typeParam !== util.NULL) || required)) {
+            throw new Error("module requestUtil => params : " + name + " bad type");
+        }
+
+    }
+
+    return param;
+}
+/**
 * Extrait les paramètres de la requête
 * @param req
 * @return params

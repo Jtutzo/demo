@@ -22,12 +22,8 @@ router.get('/', function(req, res, next) {
 */
 router.post('/get-all', function(req, res, next) {
     try {
-        userService.getAll(function(err, users) {
-            if (err === undefined || err === null) {
-                responseUtil.sendObject(req, res, users);
-            } else {
-                responseUtil.sendError(req, res, err);
-            }
+        userService.getAll(function(users) {
+            responseUtil.sendObject(req, res, users);
         });
     } catch (e) {
         responseUtil.sendError(req, res, e);
@@ -36,16 +32,14 @@ router.post('/get-all', function(req, res, next) {
 
 /**
 * Enregistre un utilisateur
+* @param user (required)
+* @return user saved
 */
 router.post('/save', function(req, res, next) {
     try {
-        var params = requestUtil.getParams(req, [{name: 'user', type: util.OBJECT, required: true}]);
-        userService.save(params['user'], function(err, user) {
-            if (err === undefined || err === null) {
-                responseUtil.sendObject(req, res, user);
-            } else {
-                responseUtil.sendError(req, res, err);
-            }
+        var user = requestUtil.getParam(req, 'user', {type: util.OBJECT, required: true});
+        userService.save(user, function(userSaved) {
+            responseUtil.sendObject(req, res, userSaved);
         });
     } catch (e) {
         responseUtil.sendError(req, res, e);
@@ -57,13 +51,9 @@ router.post('/save', function(req, res, next) {
 */
 router.post("/remove", function(req, res, next) {
     try {
-        var params = requestUtil.getParams(req, [{name: 'idUsers', type: util.ARRAY, required: true}]);
-        userService.remove(params['idUsers'], function(err, idUsers) {
-            if (err === undefined || err === null) {
-                responseUtil.sendObject(req, res, idUsers);
-            } else {
-                responseUtil.sendError(req, res, err);
-            }
+        var idUsers = requestUtil.getParam(req, 'idUsers', {type: util.ARRAY, required: true});
+        userService.remove(idUsers, function(idUsers) {
+            responseUtil.sendObject(req, res, idUsers);
         });
     } catch (e) {
         responseUtil.sendError(req, res, e);
