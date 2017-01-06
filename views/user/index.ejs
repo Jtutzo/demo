@@ -40,7 +40,7 @@
                         <td data-bind="text: nom, click: $parent.selectedLine"></td>
                         <td data-bind="text: prenom, click: $parent.selectedLine"></td>
                         <td data-bind="text: (pays)?pays.libelle:'', click: $parent.selectedLine"></td>
-                        <td data-bind="text: date, click: $parent.selectedLine"></td>
+                        <td data-bind="text: (date)?util.formattedDate(date, 'DD/MM/YYYY'):'', click: $parent.selectedLine"></td>
                     </tr>
                 </tbody>
             </table>

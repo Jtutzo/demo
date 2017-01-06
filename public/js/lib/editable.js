@@ -194,7 +194,6 @@ componentUtil.register('editable-date', {
         {name: 'classControl', type: 'string', default: "col-sm-10", required: false, mustBeObs: false, base: null, description: "Class de la div de control"},
         {name: 'required', type: 'boolean', default: false, required: false, mustBeObs: false, base: null, description: "Si le champ est obligatoire"},
         {name: 'maxLength', type: 'number', default: null, required: false, mustBeObs: false, base: null, description: "taille max du champ de saisi"},
-        {name: 'format', type: 'string', default: "text", required: false, mustBeObs: false, base: null, description: "Format de la valeur"},
         {name: 'validation', type: 'function', default: null, required: false, mustBeObs: false, base: null, description: "Méthode de validation"},
         {name: 'min', type: 'number', default: null, required: false, mustBeObs: false, base: null, description: "Valeur min d'un nombre"},
         {name: 'max', type: 'number', default: null, required: false, mustBeObs: false, base: null, description: "Valeur max d'un nombre"},
@@ -203,9 +202,24 @@ componentUtil.register('editable-date', {
         {name: 'value', type: 'NA', default: null, required: false, mustBeObs: true, base: null, description: "Valeur du composant"},
         {name: 'visible', type: 'boolean', default: true, required: false, mustBeObs: true, base: null, description: "Si le composant est visible"},
         {name: 'enable', type: 'boolean', default: true, required: false, mustBeObs: true, base: null, description: "Si le composant autorise les modifications"},
-        {name: 'error', type: 'boolean', default: false, required: false, mustBeObs: true, base: null, description: "Si le champ est en erreur"}
+        {name: 'error', type: 'boolean', default: false, required: false, mustBeObs: true, base: null, description: "Si le champ est en erreur"},
+        {name: 'langue', type: 'string', default: 'fr', required: false, mustBeObs: false, base: null, description: "Langue de la date (en, fr, it, es)"}
     ],
     viewModel: function(self, params) {
+
+        var formatByLangue = {
+            'en': 'MM/DD/YYYY',
+            'fr': 'DD/MM/YYYY',
+            'it': 'DD/MM/YYYY',
+            'es': 'DD/MM/YYYY',
+        }
+
+        if (util.isNotString(self['langue']) || util.isEmpty(self['langue'])
+            || util.noContain(['fr', 'en', 'it', 'es'], self['langue'])) {
+            self['langue'] = 'en';
+        }
+
+        self['format'] = formatByLangue[self['langue']];
 
         if (typeof self['label'] === 'string' && self['label'].trim() != 0) {
             self['visibleLabel'] = ko.observable(true);

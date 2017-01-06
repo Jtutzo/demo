@@ -22,7 +22,7 @@
         <label data-bind="attr:{'class': classLabel}, text: label, visible: visibleLabel()"></label>
         <div data-bind="attr:{'class': classControl}">
             <input class="form-control" data-bind="datepicker: value, attr:{'type': format, 'placeholder': placeholder}, event: {blur: blur, focus: focus},
-                datepickerOptions: {format: 'dd/mm/yyyy', weekStart: 1, autoclose: true, gotoCurrent: true, language: 'fr'}">
+                datepickerOptions: {format: format, weekStart: 1, autoclose: true, gotoCurrent: true, language: langue}">
         </div>
     </div>
 </template>

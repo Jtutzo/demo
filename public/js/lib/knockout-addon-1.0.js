@@ -2,6 +2,13 @@
 * Addon pour knockoutjs
 * @autor: JTutzo
 * @version 2.0
+* @dependance:
+* - knockoutjs
+* - momentjs
+* - jquery
+* - select2
+* - bootstrap-datepicker
+* - bootstrap
 */
 
 /**=============================================================================
@@ -161,38 +168,81 @@ ko.bindingHandlers.select2 = {
 /**
 * Binding datepicker
 */
-ko.bindingHandlers.datepicker = {
-    init: function(element, valueAccessor, allBindingsAccessor) {
-      //initialize datepicker with some optional options
-      var options = allBindingsAccessor().datepickerOptions || {};
-      $(element).datepicker(options);
+ko.bindingHandlers.datepicker = new function() {
 
-      //when a user changes the date, update the view model
-      ko.utils.registerEventHandler(element, "changeDate", function(event) {
-             var value = valueAccessor();
-             if (ko.isObservable(value)) {
-                 value(event.date);
-             }
-      });
+    var lock = false;
+    var regexFormatDate = {
+        'MM/DD/YYYY': [/(\d{2})\/(\d{2})\/(\d{4})/, "$1/$2/$3"],
+        'DD/MM/YYYY': [/(\d{2})\/(\d{2})\/(\d{4})/, "$2/$1/$3"]
+    }
 
-      $(element).on('hide', function(e) {
-          e.stopPropagation();
-      });
-    },
-    update: function(element, valueAccessor)   {
-        var widget = $(element).data("datepicker");
-        if (widget) {
-            //when the view model is updated, update the widget
-            var date = ko.utils.unwrapObservable(valueAccessor());
-            if (date && !isNaN(date)) {
-                $(element).datepicker("setDate", date);
-            } else {
-                data = "";
-                $(element).val(date).datepicker("update");
+    return {
+        init: function(element, valueAccessor, allBindingsAccessor) {
+            //initialize datepicker with some optional options
+            var options = allBindingsAccessor().datepickerOptions || {};
+            var format = (options.format === 'DD/MM/YYYY' || options.format === 'MM/DD/YYYY')?options.format:'MM/DD/YYYY';
+            options.format = (format === 'DD/MM/YYYY')?'dd/mm/yyyy':'mm/dd/yyyy';
+            $(element).datepicker(options);
+
+            //when a user changes the date, update the view model
+            ko.utils.registerEventHandler(element, "changeDate", function(event) {
+                lock = true;
+                updateValue(valueAccessor(), event.date);
+            });
+
+            $(element).on('change', function() {
+                if (!lock) {
+                    var date = newDate($(element).val(), format);
+                    updateDatepicker($(element), date);
+                    updateValue(valueAccessor(), date);
+                }
+                lock = false;
+            });
+
+            $(element).on('hide', function(e) {
+                e.stopPropagation();
+            });
+        },
+        update: function(element, valueAccessor, allBindingsAccessor)   {
+            var widget = $(element).data("datepicker");
+            var value = ko.utils.unwrapObservable(valueAccessor());
+            if (widget) {
+                var date = (value !== undefined && value !== null)?new Date(value):null;
+                if (date && isNaN(date.getTime())) {
+                    date = null;
+                }
+                updateDatepicker($(element), date);
             }
         }
+    };
+
+    function newDate(dateString, format) {
+        var date = null;
+        if (typeof dateString === 'string') {
+            date = new Date(dateString.replace(regexFormatDate[format][0], regexFormatDate[format][1]));
+        }
+        if (date && isNaN(date.getTime())) {
+            date = null;
+        } else {
+            date.setTime(date.getTime() + (2*60*60*1000));
+        }
+        return date;
     }
-};
+
+    function updateValue(value, date) {
+        if (ko.isObservable(value)) {
+            value(date);
+        }
+    }
+
+    function updateDatepicker(element$, date) {
+        if (date) {
+            element$.datepicker("setDate", date).datepicker("update");
+        } else {
+            element$.val(date).datepicker("update");
+        }
+    }
+}
 
 /**=============================================================================
 *                               libs

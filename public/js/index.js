@@ -116,7 +116,7 @@ $(document).ready(function() {
         self['valuesSelected'].subscribe(function() {
             toggleButton();
         })
-
+        
         /**
         * Retourne les utilisateurs sélectionnés
         */

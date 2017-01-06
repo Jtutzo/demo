@@ -2,7 +2,7 @@
 * Object util => methode util
 * @autor: Jtutzo
 * @version: 1.1
-* @require jquery for ajax
+* @require jquery for ajax, momentjs for formatted date
 *
 *===============================================================================
 *                               constantes
@@ -17,6 +17,15 @@
 * - ARRAY                                           => Type array
 * - FUNCTION                                        => Type function
 *
+* - FORMAT_DATE_DD_MM_YYYY_1                        => date format 'DD/MM/YYYY'
+* - FORMAT_DATE_DD_MM_YY_1                          => date format 'DD/MM/YY'
+* - FORMAT_DATE_DD_MM_YYYY_2                        => date format 'DD-MM-YYYY'
+* - FORMAT_DATE_DD_MM_YY_2                          => date format 'DD-MM-YY'
+* - FORMAT_DATE_MM_DD_YYYY_1                        => date format 'MM/DD/YYYY'
+* - FORMAT_DATE_MM_DD_YY_1                          => date format 'MM/DD/YY'
+* - FORMAT_DATE_MM_DD_YYYY_2                        => date format 'MM-DD-YYYY'
+* - FORMAT_DATE_MM_DD_YY_2                          => date format 'MM-DD-YY'
+
 * - SUCCESS									        => success (ajax)
 * - ERROR									        => error (ajax)
 *
@@ -132,6 +141,14 @@
 * - modeDebug(isModeDebug)                          => Enable/disable mode debug (exception NOT_BOOLEAN_EXCEPTION)
 * - debug(message)                                  => Write in console debug
 * - error(message)                                  => Write in console error
+*
+*===============================================================================
+*                             methodes date
+*===============================================================================
+*
+* - newDate(dateString, format)                     => Create a new date with format in param
+* - formattedDate(date, format)                     => Formatted date (exception NOT_FUNCTION_EXCEPTION, NOT_STRING_EXCEPTION, ARGUMENT_EXCEPTION)
+* - isValideDate(date)                              => Date is valide
 */
 
 var util = (function() {
@@ -150,6 +167,28 @@ var util = (function() {
         OBJECT: 'object',
         ARRAY: 'array',
         FUNCTION: 'function',
+
+        //Format date
+        FORMAT_DATE_DD_MM_YYYY_1: 'DD/MM/YYYY',
+        FORMAT_DATE_DD_MM_YY_1: 'DD/MM/YY',
+        FORMAT_DATE_DD_MM_YYYY_2: 'DD-MM-YYYY',
+        FORMAT_DATE_DD_MM_YY_2: 'DD-MM-YY',
+        FORMAT_DATE_MM_DD_YYYY_1: 'MM/DD/YYYY',
+        FORMAT_DATE_MM_DD_YY_1: 'MM/DD/YY',
+        FORMAT_DATE_MM_DD_YYYY_2: 'MM-DD-YYYY',
+        FORMAT_DATE_MM_DD_YY_2: 'MM-DD-YY',
+
+        //regex for formatted date
+        regexFormat: {
+            'DD/MM/YYYY': [/(\d{2})\/(\d{2})\/(\d{4})/, "$2/$1/$3"],
+            'DD/MM/YY': [/(\d{2})\/(\d{2})\/(\d{2})/, "$2/$1/$3"],
+            'DD/MM/YYYY': [/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"],
+            'DD/MM/YY': [/(\d{2})-(\d{2})-(\d{2})/, "$2/$1/$3"],
+            'MM/DD/YYYY': [/(\d{2})\/(\d{2})\/(\d{4})/, "$1/$2/$3"],
+            'MM/DD/YY': [/(\d{2})\/(\d{2})\/(\d{2})/, "$1/$2/$3"],
+            'MM/DD/YYYY': [/(\d{2})-(\d{2})-(\d{4})/, "$1/$2/$3"],
+            'MM/DD/YY': [/(\d{2})-(\d{2})-(\d{2})/, "$1/$2/$3"]
+        },
 
         //Ajax response
         SUCCESS: "SUCCESS",
@@ -1232,8 +1271,54 @@ var util = (function() {
         */
         error: function(message) {
             console.error("ERROR " + message);
-        }
+        },
 
+        /*====================================================================================
+        *                                   methodes date
+        *=====================================================================================*/
+        /**
+        * Create a new date with format in param
+        * @param dateString
+        * @param format
+        * @return Date
+        */
+        newDate: function(dateString, format) {
+            var date;
+            if (_private.isNullOrUndefined(dateString)) {
+                date = null;
+            } else if (util.isArray(regexFormat[format])) {
+                date = new Date(dateString.replace(regexFormat[format][0], regexFormat[format][1]));
+            } else {
+                date = new Date(dateString);
+            }
+            return date;
+        },
+
+        /**
+        * Formatted date
+        * @param date
+        * @param format
+        * @return string
+        * @exception NOT_FUNCTION_EXCEPTION, NOT_STRING_EXCEPTION, ARGUMENT_EXCEPTION
+        */
+        formattedDate: function(date, format) {
+            _private.notFunctionException(moment, "util.formattedDate => moment lib is required.");
+            _private.notStringException(format, "util.formattedDate => format must be an string value.");
+            _private.argumentException(_private.isValideDate(date), "util.formattedDate => date isn't a date value.");
+            return moment(date).format(format);
+        },
+
+        /**
+        * Date is valide
+        * @param date
+        * @return boolean
+        */
+        isValideDate: function(date) {
+            if (_private.isObject(date) && isNaN(date.getTime())) {
+                return true;
+            }
+            return false;
+        }
     }
 
     var _public = {
@@ -1246,6 +1331,15 @@ var util = (function() {
         OBJECT: _private.OBJECT,
         ARRAY: _private.ARRAY,
         FUNCTION: _private.FUNCTION,
+
+        FORMAT_DATE_DD_MM_YYYY_1: _private.FORMAT_DATE_DD_MM_YYYY_1,
+        FORMAT_DATE_DD_MM_YY_1: _private.FORMAT_DATE_DD_MM_YY_1,
+        FORMAT_DATE_DD_MM_YYYY_2: _private.FORMAT_DATE_DD_MM_YYYY_2,
+        FORMAT_DATE_DD_MM_YY_2: _private.FORMAT_DATE_DD_MM_YY_2,
+        FORMAT_DATE_MM_DD_YYYY_1: _private.FORMAT_DATE_MM_DD_YYYY_1,
+        FORMAT_DATE_MM_DD_YY_1: _private.FORMAT_DATE_MM_DD_YY_1,
+        FORMAT_DATE_MM_DD_YYYY_2: _private.FORMAT_DATE_MM_DD_YYYY_2,
+        FORMAT_DATE_MM_DD_YY_2: _private.FORMAT_DATE_MM_DD_YY_2,
 
         SUCCESS: _private.SUCCESS,
         ERROR: _private.ERROR,
@@ -1337,7 +1431,11 @@ var util = (function() {
 
         modeDebug: _private.modeDebug,
         debug: _private.debug,
-        error: _private.error
+        error: _private.error,
+
+        newDate: _private.newDate,
+        formattedDate: _private.formattedDate,
+        isValideDate: _private.isValideDate
 
     }
 
