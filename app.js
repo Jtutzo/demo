@@ -5,7 +5,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./routes/index');
 var userRoute = require('./routes/userRoute');
 var paysRoute = require('./routes/paysRoute');
 
@@ -23,7 +22,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
+app.get('/', function(req, res, next) {
+    res.redirect('/user');
+});
+
 app.use('/user', userRoute);
 app.use('/pays', paysRoute);
 

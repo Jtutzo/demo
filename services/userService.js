@@ -9,7 +9,9 @@ module.exports.getAll = function(handler) {
     models.User.findAll({
         include: [{model: models.Pays, as: 'pays'}]
     }).then(function(users) {
-        if (util.isFunction(handler)) handler(users);
+        if (util.isFunction(handler)) handler(null, users);
+    }).catch(function (err) {
+        if (util.isFunction(handler)) handler(err, null);
     });
 }
 
@@ -25,7 +27,9 @@ module.exports.getById = function(id, handler) {
     models.User.findById(idNum, {
         include: [{model: models.Pays, as: 'pays'}]
     }).then(function(user) {
-        if (util.isFunction(handler)) handler(user);
+        if (util.isFunction(handler)) handler(null, user);
+    }).catch(function (err) {
+        if (util.isFunction(handler)) handler(err, null);
     });
 }
 
@@ -58,7 +62,9 @@ module.exports.create = function(user, handler) {
     }).then(function(resp) {
         var id = resp.id;
         user['id'] = id;
-        if (util.isFunction(handler)) handler(user);
+        if (util.isFunction(handler)) handler(null, user);
+    }).catch(function (err) {
+        if (util.isFunction(handler)) handler(err, null);
     });
 }
 
@@ -79,7 +85,9 @@ module.exports.update = function(user, handler) {
     }, {
         where: { id: idNum }
     }).then(function() {
-        if (util.isFunction(handler)) handler(user);
+        if (util.isFunction(handler)) handler(null, user);
+    }).catch(function (err) {
+        if (util.isFunction(handler)) handler(err, null);
     });
 }
 
@@ -90,13 +98,11 @@ module.exports.update = function(user, handler) {
 */
 module.exports.remove = function(idUsers, handler) {
     var idUsers = (util.isArray(idUsers))?idUsers:[idUsers];
-    idUsers.forEach(function(id, index) {
-        var idNum = JSON.parse(id);
-        util.notNumberException(idNum, "userService => id must be a number value");
-        models.User.destroy({
-            where: { id: idNum }
-        }).then(function() {
-            if (util.isFunction(handler) && (index === idUsers.length - 1)) handler(idUsers);
-        });
+    models.User.destroy({
+        where: { id: {$in: idUsers} }
+    }).then(function() {
+        if (util.isFunction(handler)) handler(null, idUsers);
+    }).catch(function (err) {
+        if (util.isFunction(handler))handler(err, null);
     });
 }

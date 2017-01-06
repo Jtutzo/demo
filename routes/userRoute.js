@@ -22,8 +22,12 @@ router.get('/', function(req, res, next) {
 */
 router.post('/get-all', function(req, res, next) {
     try {
-        userService.getAll(function(users) {
-            responseUtil.sendObject(req, res, users);
+        userService.getAll(function(err, users) {
+            if (util.isNullOrUndefined(err)) {
+                responseUtil.sendObject(req, res, users);
+            } else {
+                responseUtil.sendError(req, res, err);
+            }
         });
     } catch (e) {
         responseUtil.sendError(req, res, e);
@@ -38,8 +42,12 @@ router.post('/get-all', function(req, res, next) {
 router.post('/save', function(req, res, next) {
     try {
         var user = requestUtil.getParam(req, 'user', {type: util.OBJECT, required: true});
-        userService.save(user, function(userSaved) {
-            responseUtil.sendObject(req, res, userSaved);
+        userService.save(user, function(err, userSaved) {
+            if (util.isNullOrUndefined(err)) {
+                responseUtil.sendObject(req, res, userSaved);
+            } else {
+                responseUtil.sendError(req, res, err);
+            }
         });
     } catch (e) {
         responseUtil.sendError(req, res, e);
@@ -52,8 +60,12 @@ router.post('/save', function(req, res, next) {
 router.post("/remove", function(req, res, next) {
     try {
         var idUsers = requestUtil.getParam(req, 'idUsers', {type: util.ARRAY, required: true});
-        userService.remove(idUsers, function(idUsers) {
-            responseUtil.sendObject(req, res, idUsers);
+        userService.remove(idUsers, function(err, idUsers) {
+            if (util.isNullOrUndefined(err)) {
+                responseUtil.sendObject(req, res, idUsers);
+            } else {
+                responseUtil.sendError(req, res, err);
+            }
         });
     } catch (e) {
         responseUtil.sendError(req, res, e);

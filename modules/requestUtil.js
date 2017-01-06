@@ -28,7 +28,11 @@ module.exports.getParam = function(req, name, option) {
 
     util.notObjectException(req, "requestUtil => req must be an object value");
 
-    var param = req[name];
+    var param = (util.isObject(req.body))?req.body[name]:null;
+
+    if (util.isNotNullOrUndefined(param)) {
+        param = JSON.parse(param);
+    }
 
     if (util.isObject(option)) {
 

@@ -7,7 +7,9 @@ var util = require('../modules/util');
 */
 module.exports.getAll = function(handler) {
     models.Pays.findAll().then(function(pays) {
-        if (util.isFunction(handler)) handler(pays);
+        if (util.isFunction(handler)) handler(null, pays);
+    }).catch(function (err) {
+        if (util.isFunction(handler)) handler(err, null);
     });
 }
 
@@ -21,7 +23,9 @@ module.exports.getById = function(id, handler) {
     var idNum = JSON.parse(id);
     util.notNumberException(idNum, "paysService => id must be a number value");
     models.User.findById(idNum).then(function(pays) {
-        if (util.isFunction(handler)) handler(pays);
+        if (util.isFunction(handler)) handler(null, pays);
+    }).catch(function (err) {
+        if (util.isFunction(handler)) handler(err, null);
     });
 }
 
@@ -35,6 +39,8 @@ module.exports.getByCode = function(code, handler) {
     models.Pays.findAll({
         where: {'code': code}
     }).then(function(pays) {
-        if (util.isFunction(handler)) handler(pays);
+        if (util.isFunction(handler)) handler(null, pays);
+    }).catch(function (err) {
+        if (util.isFunction(handler)) handler(err, null);
     });
 }

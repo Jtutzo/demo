@@ -11,8 +11,12 @@ var requestUtil = require('./../modules/requestUtil');
 */
 router.post('/get-all', function(req, res, next) {
     try {
-        paysService.getAll(function(pays) {
-            responseUtil.sendObject(req, res, pays);
+        paysService.getAll(function(err, pays) {
+            if (util.isNullOrUndefined(err)) {
+                responseUtil.sendObject(req, res, pays);
+            } else {
+                responseUtil.sendError(req, res, err);
+            }
         });
     } catch (e) {
         responseUtil.sendError(req, res, e);
@@ -26,8 +30,12 @@ router.post('/get-all', function(req, res, next) {
 router.post('/get-by-code', function(req, res, next) {
     try {
         var code = requestUtil.getParam(req, 'code', {type: util.STRING, required: true});
-        paysService.getByCode(code, function(pays) {
-            responseUtil.sendObject(req, res, pays);
+        paysService.getByCode(code, function(err, pays) {
+            if (util.isNullOrUndefined(err)) {
+                responseUtil.sendObject(req, res, pays);
+            } else {
+                responseUtil.sendError(req, res, err);
+            }
         });
     } catch (e) {
         responseUtil.sendError(req, res, e);
