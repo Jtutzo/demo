@@ -1,7 +1,7 @@
 {
   "development": {
     "dialect": "sqlite",
-    "storage": "./dbb/dbb_base.sqlite"
+    "storage": "./dbb.sqlite"
   },
   "test": {
     "dialect": "sqlite",

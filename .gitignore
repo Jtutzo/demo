@@ -48,3 +48,8 @@ jspm_packages
 
 # Yarn Integrity file
 .yarn-integrity
+
+# dossier models, routes, services
+models
+routes
+services
