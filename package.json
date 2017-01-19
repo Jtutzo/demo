@@ -1,6 +1,6 @@
 {
   "name": "demo-user",
-  "version": "0.1.2-beta",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "compile": "coffee -co ./dist ./src",
