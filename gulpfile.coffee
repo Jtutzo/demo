@@ -19,26 +19,18 @@ gulp.task 'clean', () ->
     .pipe clean()
 
 ###
-* Compile-coffee
+* Build core
 ###
-gulp.task 'compile-core', () -> 
+gulp.task 'build-core', () -> 
     gulp.src ["./src/**/*.coffee", "!./src/public/**/*.coffee"]
     .pipe coffee bare: true
     .pipe gulp.dest "./dist/"
     .on 'error', gutil.log
 
 ###
-* Compile-css
+* Move and minify css
 ###
-gulp.task 'compile-css', () -> 
-    gulp.src "./src/**/*.css"
-    .pipe gulp.dest "./dist/"
-    .on 'error', gutil.log
-
-###
-* Compile-css-minify
-###
-gulp.task 'compile-css-minify', () -> 
+gulp.task 'minify-css', () -> 
     gulp.src "./src/**/*.css"
     .pipe minifyCss()
     .pipe gulp.dest "./dist/"
@@ -69,6 +61,6 @@ gulp.task 'browserify-debug', () ->
     .pipe gulp.dest './dist/public/'
     .on 'error', gutil.log
 
-gulp.task 'compile-public', ['compile-css', 'browserify']
-gulp.task 'build-dev', ['compile-core', 'compile-css', 'browserify-debug']
-gulp.task 'build-prod', ['compile-core', 'compile-public']
+gulp.task 'build-static', ['minify-css', 'browserify-debug']
+gulp.task 'build-dev', ['build-core', 'build-static']
+gulp.task 'build-prod', ['build-core', 'minify-css', 'browserify']

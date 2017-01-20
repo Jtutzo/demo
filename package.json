@@ -5,11 +5,13 @@
   "scripts": {
     "build-gulp": "coffee -c gulpfile.coffee",
     "clean": "build-gulp && gulp clean",
+    "build-core": "gulp build-core",
+    "build-static": "gulp build-static",
     "build-dev": "npm install && gulp clean && gulp build-dev",
     "build-prod": "npm install && gulp clean && gulp build-prod",
     "quick-start": "gulp clean && gulp build-dev && npm start",
     "quick-debug": "gulp clean && gulp build-dev && npm debug",
-    "start": "npm start",
+    "start": "node ./dist/index.js",
     "debug": "node-debug ./dist/index.js"
   },
   "dependencies": {
