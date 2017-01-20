@@ -1,5 +1,5 @@
 models  = require '../models'
-util = require('common').Util()
+util = require('common').util
 
 ###
 # Récupère tous les utilisateurs

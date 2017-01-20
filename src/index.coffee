@@ -6,7 +6,7 @@
 app = require './app'
 debug = require('debug')('demo-user:server')
 http = require 'http'
-models = require './models'
+models = require './core/models'
 
 ###
 # Normalize a port into a number, string, or false.

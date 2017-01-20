@@ -4,7 +4,7 @@ fs = require "fs"
 path = require "path"
 Sequelize = require "sequelize"
 env = process.env.NODE_ENV || "development"
-config = require(path.join __dirname, '..', 'config.json')[env]
+config = require(path.join __dirname, '..', '..', '..', 'config.json')[env]
 
 config['define'] = {freezeTableName: true, timestamps: false}
 
