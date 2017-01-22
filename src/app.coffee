@@ -6,8 +6,8 @@ cookieParser = require 'cookie-parser'
 bodyParser = require 'body-parser'
 
 # Modules controller
-userRoute = require './core/routes/userRoute'
-paysRoute = require './core/routes/paysRoute'
+userRoute = require './routes/user'
+paysRoute = require './routes/pays'
 
 app = express()
 
@@ -22,7 +22,7 @@ app.use bodyParser.urlencoded { extended: false }
 app.use cookieParser()
 app.use express.static path.join __dirname, 'public'
 
-app.get '/', (req, res, next) -> res.render 'index.ejs', {title : 'demo-require'}
+app.get '/', (req, res, next) -> res.render 'index.ejs', {pathStatic: 'home', title : 'demo-require'}
 
 app.use '/user', userRoute
 app.use '/pays', paysRoute

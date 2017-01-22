@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%= title %></title>
+        <% include ./../common/default-include.ejs %>
+        <script type="text/javascript">
+		      window.getAllUsersUrl = "/user/get-all";
+              window.saveUserUrl = "/user/save";
+              window.removeUserUrl = "/user/remove";
+              window.referentielUrl = "{referentiel}/get-all";
+	    </script>
+    </head>
+    <body>
+        
+        <div id="app" class="container">
+
+            <!-- Title -->
+            <h1><center><%= title %></center></h1>
+
+            <!-- Tableau users -->
+            <table id="liste_users">
+                <thead>
+                    <tr>
+                        <td style="width:10%"><input type="checkbox" v-model="checkAll"/></td>
+                        <td style="width:10%">Id</td>
+                        <td style="width:20%">Nom</td>
+                        <td style="width:20%">Prénom</td>
+                        <td style="width:20%">Pays</td>
+                        <td style="width:20%">Date</td>
+                    </tr>
+                </thead>
+                <tbody v-for="(user, index) in users">
+                    <tr v-bind:style="{ 'background-color': ((index + 1)%2==0)?'#f1f1f1':'#fff'}">
+                        <td><input v-bind:value="user.id" type="checkbox" name="users" v-model="idUserChecked"/></td>
+                        <td>{{user.id}}</td>
+                        <td>{{user.nom}}</td>
+                        <td>{{user.prenom}}</td>
+                        <td>{{(user.pays)?user.pays.libelle:''}}</td>
+                        <td>{{(user.date)?toFormatDate(user.date, 'DD/MM/YYYY'):''}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Buttons -->
+            <div class="pull-right">
+                <button id="refresh" class="btn btn-default" @click="loadUsers">Refresh</button>
+                <button id="modal" class="btn btn-default" @click="showModal = true">modal</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Modal</button>
+            </div>
+        
+            <% include ./../modal/modal-user.ejs %>
+        </div>
+
+    </body>
+</html>

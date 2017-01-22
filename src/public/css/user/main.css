@@ -1,0 +1,7 @@
+@import url("table-users.css");
+@import url("../../../../node_modules/bootstrap/dist/css/bootstrap.css");
+@import url("../../components/modal/styles.css");
+
+body {
+    background-color: #fff;
+}

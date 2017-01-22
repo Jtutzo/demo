@@ -1,6 +1,6 @@
 express = require 'express'
 router = express.Router()
-paysService = require './../services/paysService'
+paysService = require '../core/services/pays'
 util = require('common').util
 expressUtil = require('common').expressUtil
 

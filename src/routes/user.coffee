@@ -1,6 +1,6 @@
 express = require 'express'
 router = express.Router();
-userService = require './../services/userService'
+userService = require '../core/services/user'
 util = require('common').util
 expressUtil = require('common').expressUtil
 
@@ -9,7 +9,7 @@ expressUtil = require('common').expressUtil
 ###
 router.get '/', (req, res, next) ->
     try
-      res.render "user/index.ejs", { title: 'Demo Users' }
+      res.render "user/index.ejs", { title: 'Demo Users', pathStatic: 'user' }
     catch e then expressUtil.sendError req, res, e
 
 ###

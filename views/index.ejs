@@ -1,16 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <!-- main.bundle.js -->
-        <script src="/scripts/home/main.bundle.js"></script>
+        <% include ./common/default-include.ejs %>
         <title><%= title %></title>
-        <link rel="stylesheet" href="/css/index.css">
-        <script type="text/javascript">
-		      window.getAllUsersUrl = "/user/get-all";
-              window.saveUserUrl = "/user/save";
-              window.removeUserUrl = "/user/remove";
-              window.getAllReferentielUrl = "{referentiel}/get-all";
-	    </script>
     </head>
     <body>
 
@@ -18,6 +10,8 @@
 
             <!-- Title -->
             <h1><center><%= title %></center></h1>
+        
+        </div>
 
     </body>
 </html>
