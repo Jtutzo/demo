@@ -1,0 +1,15 @@
+<modal id="modal_user" :show="show" @close="close">
+    <h3 slot="header"><center>{{titre}}</center></h3>
+    <div slot="body">
+        <edit-text id="nom" label="Nom" v-model="nom" class-label="col-sm-4" class-control="col-sm-8" :etat="etatNom" required="true"
+                   @blur="validNom" @focus="etatNom='clean'"></edit-text>
+        <edit-text id="prenom" label="Prenom" v-model="prenom" class-label="col-sm-4" class-control="col-sm-8" :etat="etatPrenom" required="true"
+                   @blur="validPrenom" @focus="etatPrenom='clean'"></edit-text>
+    </div>
+    <div slot="footer">
+        <div class="pull-right">
+            <button id="save" class="btn btn-default" @click="save">Save</button>
+            <button id="cancel" class="btn btn-default" @click="close">Cancel</button>
+        </div>
+    </div>
+</modal>

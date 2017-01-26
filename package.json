@@ -1,9 +1,9 @@
 {
   "name": "demo-browserify",
-  "version": "0.0.1",
+  "version": "2.0.1",
   "private": true,
   "scripts": {
-    "build-gulp": " coffee -c gulpfile.coffee",
+    "build-gulp": "coffee -c gulpfile.coffee",
     "clean": "npm run build-gulp && gulp clean",
     "build-core": "gulp build-core",
     "build-controller": "gulp build-controller",
@@ -18,7 +18,6 @@
   "dependencies": {
     "body-parser": "~1.15.2",
     "bootstrap": "^3.3.7",
-    "browserify-handlebars": "^1.0.0",
     "browserify-shim": "^3.8.12",
     "coffee": "^3.3.0",
     "coffeeify": "^2.1.0",
@@ -36,7 +35,6 @@
     "gulp-minify-css": "^1.2.4",
     "gulp-rename": "^1.2.2",
     "gulp-util": "^3.0.8",
-    "handlebars": "^4.0.6",
     "jquery": "^3.1.1",
     "morgan": "~1.7.0",
     "sequelize": "^3.23.6",
@@ -44,7 +42,8 @@
     "serve-favicon": "~2.3.0",
     "underscore": "^1.8.3",
     "vinyl-source-stream": "^1.1.0",
-    "vue": "^2.1.10"
+    "vue": "^2.1.10",
+    "vueify": "^9.4.0"
   },
   "browser": {
     "vue": "vue/dist/vue.common",
@@ -52,7 +51,9 @@
     "jQuery": "./node_modules/jquery/dist/jquery.min.js"
   },
   "browserify": {
-    "transform": ["browserify-shim"]
+    "transform": [
+      "browserify-shim"
+    ]
   },
   "browserify-shim": {
     "bootstrap": {

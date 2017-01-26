@@ -30,8 +30,8 @@
                     </tr>
                 </thead>
                 <tbody v-for="(user, index) in users">
-                    <tr v-bind:style="{ 'background-color': ((index + 1)%2==0)?'#f1f1f1':'#fff'}">
-                        <td><input v-bind:value="user.id" type="checkbox" name="users" v-model="idUserChecked"/></td>
+                    <tr :style="{ 'background-color': ((index + 1)%2==0)?'#f1f1f1':'#fff'}">
+                        <td><input :value="user.id" type="checkbox" name="users" v-model="idUserChecked"/></td>
                         <td>{{user.id}}</td>
                         <td>{{user.nom}}</td>
                         <td>{{user.prenom}}</td>
@@ -44,12 +44,13 @@
             <!-- Buttons -->
             <div class="pull-right">
                 <button id="refresh" class="btn btn-default" @click="loadUsers">Refresh</button>
-                <button id="modal" class="btn btn-default" @click="showModal = true">modal</button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Modal</button>
+                <button id="add" class="btn btn-default" @click="addUser">Add</button>
+                <button id="update" class="btn btn-default" @click="updateUser" :disabled="disableButtonUpdate">Update</button>
+                <button id="remove" class="btn btn-default" @click="removeUser" :disabled="disableButtonRemove">Remove</button>
             </div>
-        
-            <% include ./../modal/modal-user.ejs %>
+            
         </div>
-
+        
+        <% include ./modal-user.ejs %>
     </body>
 </html>

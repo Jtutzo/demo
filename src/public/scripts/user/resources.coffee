@@ -17,7 +17,7 @@ loadUsers = (callback) ->
 # @param callback function à executer après le chargment
 ###
 saveUser = (user, callback) -> 
-    util.notObjectExcption user, "user must be an object value."
+    util.notObjectException user, "user must be an object value."
 
     data = user: JSON.stringify user
 

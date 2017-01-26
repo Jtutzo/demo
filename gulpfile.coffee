@@ -11,7 +11,7 @@ browserify           = require 'gulp-browserify'
 clean                = require 'gulp-clean'
 minifyCss            = require 'gulp-minify-css'
 cssimport            = require "gulp-cssimport"
-browserifyHandlebars = require 'browserify-handlebars'
+vueify               = require 'vueify'
 
 ###
 * Clean
@@ -41,7 +41,7 @@ gulp.task 'build-controller', () ->
 ###
 * Move and minify css
 ###
-gulp.task 'minify-css', () -> 
+gulp.task 'build-css', () -> 
     gulp.src "./src/**/main.css"
     .pipe cssimport extensions: ["css"]
     .pipe minifyCss()
@@ -54,7 +54,7 @@ gulp.task 'minify-css', () ->
 gulp.task 'browserify', () -> 
     gulp.src './src/public/**/main.coffee',  read: false
     .pipe browserify 
-      transform: ['coffeeify', browserifyHandlebars],
+      transform: ['coffeeify', [{_flags: {debug: true}}, vueify]],
       extensions: ['.coffee']
     .pipe rename extname: '.js'
     .pipe gulp.dest './dist/public/'
@@ -66,13 +66,13 @@ gulp.task 'browserify', () ->
 gulp.task 'browserify-debug', () -> 
     gulp.src './src/public/**/main.coffee', read: false
     .pipe browserify
-      transform: ['coffeeify', browserifyHandlebars],
+      transform: ['coffeeify', [{_flags: {debug: true}}, vueify]],
       extensions: ['.coffee'],
       debug : true
     .pipe rename extname: '.js'
     .pipe gulp.dest './dist/public/'
     .on 'error', gutil.log
 
-gulp.task 'build-static', ['minify-css', 'browserify-debug']
+gulp.task 'build-static', ['build-css', 'browserify-debug']
 gulp.task 'build-dev', ['build-core', 'build-controller', 'build-static']
-gulp.task 'build-prod', ['build-core', 'build-controller', 'minify-css', 'browserify']
+gulp.task 'build-prod', ['build-core', 'build-controller', 'build-css', 'browserify']
